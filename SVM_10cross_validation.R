@@ -5,7 +5,8 @@ library(haven)
 library(purrr)
 
 # Load your data and set the working directory
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
+
 
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
@@ -43,15 +44,16 @@ svr_model <- function(data, outcome) {
  r_sq <- 1 - mse / ss_total
 
 
-  # Calculate the correlation between predicted and observed values
+  # Calculate the correlation between predicted and observed values: Accuracy
  correlation <- cor(prediction, test_Y)
+  
  # Extract coefficients
- #coefficients <- coef(svr_model)
+coefficients <- coef(svr_model)
  
   return(list(tibble(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation, r_sq = r_sq), coefficients = coefficients))
 }
 
-# Replicate 10 times
+# Replicate 10 times: 10-fold cross validation
 svr_results <- map(1:10, ~svr_model(color, outcome))
 
 svm_features <- bind_rows(lapply(svr_results, function(sublist) sublist[[1]]))
