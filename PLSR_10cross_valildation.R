@@ -4,7 +4,7 @@ library(tidylog)
 library(haven)
 library(purrr)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
