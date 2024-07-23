@@ -4,15 +4,15 @@ library(haven)
 library(purrr)
 library(randomForest)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv")
 
-# Create dummy variables for "Storage_2"
+# Create dummy variables for "Storage_2": The stored samples are "1" and control group is "0"
 color <- color %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
-
+# Define which color this function predicts
 data <- color
 outcome <- "b"  
 
@@ -57,13 +57,13 @@ RandomForest_model <- function(data, outcome) {
   rmse <- sqrt(mse)  # Calculate RMSE from MSE
   mse_sd <- sd((test_Y - prediction)^2)
   
-  # Calculate the correlation between predicted and observed values
+  # Calculate the correlation between predicted and observed values: Accuracy between prediction and observation 
   correlation <- cor(prediction, test_Y)
   
   return(list(tibble(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation), importance = importances))
 }
 
-# Replicate 10 times
+# Replicate 10 times: 10-fold cross validation
 RandomForest <- map(1:10, ~ RandomForest_model(color, outcome))
 
 # Correlation and other features dataset----------------------------
@@ -81,9 +81,6 @@ library(Matrix)
 import_matrices <- lapply(rf_importance, as.matrix)
 importance_dt <- tibble(chemical = rownames(import_matrices[[1]]), bind_cols(import_matrices))
 
-
-# Assuming df_list is your list of dataframes
-# and key_var is the common key variable
 rf_IncMSE <- importance_dt %>% 
   select(chemical, starts_with("%IncMSE"))
 
@@ -94,11 +91,11 @@ rf_IncNodePurity <- importance_dt %>%
 library(writexl)
 library(openxlsx)
 
-write_xlsx(rf_features, path = "1018_rf_features_b.xlsx")
-write.xlsx(rf_features, file = "1018_rf_features_b.xlsx")
+write_xlsx(rf_features, path = "rf_features.xlsx")
+write.xlsx(rf_features, file = "rf_features.xlsx")
 
-write_xlsx(rf_IncMSE, path = "1016_rf_IncMSE_b.xlsx")
-write.xlsx(rf_IncMSE, file = "1016_rf_IncMSE_b.xlsx")
+write_xlsx(rf_IncMSE, path = "rf_IncMSE.xlsx")
+write.xlsx(rf_IncMSE, file = "rf_IncMSE.xlsx")
 
-write_xlsx(rf_IncNodePurityr, path = "rf_IncNodePurity_L.xlsx")
-write.xlsx(rf_IncNodePurity, file = "rf_IncNodePurity_L.xlsx")
+write_xlsx(rf_IncNodePurityr, path = "IncNodePurity.xlsx")
+write.xlsx(rf_IncNodePurity, file = "IncNodePurity.xlsx")
