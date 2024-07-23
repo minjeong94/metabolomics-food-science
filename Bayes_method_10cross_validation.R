@@ -4,7 +4,7 @@ library(tidylog)
 library(haven)
 library(purrr)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
@@ -31,7 +31,7 @@ bayes_a_model <- function(data, outcome)
   train_X <- model.matrix(~ . - 1, data = train_X)
   test_X <- model.matrix(~ . - 1, data = test_X)
   
-  # Define ETA for Bayes A
+  # Define ETA for Bayes A_ Here you can change it into BayesB or BayesC
   ETA <- list(
     list(X = train_X[,ncol(train_X)], model = "FIXED"),  
     list(X = train_X[,-ncol(train_X)], model = "BayesA"))
@@ -43,7 +43,8 @@ bayes_a_model <- function(data, outcome)
   rmse <- sqrt(mse)  # Calculate RMSE from MSE
   mse_sd <- sd((test_Y - prediction)^2)
   bays_a_fit$ETA
-  # Calculate the correlation between predicted and observed values
+  
+  # Calculate the correlation between predicted and observed values: Accuracy
   correlation <- cor(prediction, test_Y)
   
   coefs <- c(bays_a_fit$ETA[[2]]$b, storage = bays_a_fit$ETA[[1]]$b)
@@ -53,7 +54,7 @@ bayes_a_model <- function(data, outcome)
 }
 
 
-# Replicate 10 times
+# Replicate 10 times: 10-fold cross validation
 bayes_a_mse_L <- map(1:10, ~ bayes_a_model(color, outcome)) 
 
 
