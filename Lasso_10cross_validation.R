@@ -4,7 +4,7 @@ library(tidylog)
 library(haven)
 library(purrr)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv")
 data = color
@@ -39,7 +39,7 @@ lasso_model <- function(data, outcome)
     alpha = 0.999
   )
   
-  lambda_min <- cvfit$lambda.min
+  lambda_min <- cvfit$lambda.min #With the minimum lambda
   
   lasso_reg <- glmnet(train_X, train_Y, lambda = lambda_min)
   prediction <- predict(lasso_reg, newx = test_X)
@@ -48,13 +48,13 @@ lasso_model <- function(data, outcome)
   mse_sd <- sd((test_Y - prediction)^2)
   r_sq <- 1 - sum((test_Y - prediction)^2)/sum((test_Y - mean(test_Y))^2)
   
-  # Calculate the correlation between predicted and observed values
+  # Calculate the correlation between predicted and observed values: Accuracy
   correlation <- cor(prediction, test_Y)
   
   return(list(tibble(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation, r_sq = r_sq), betas = lasso_reg$beta))
 }
 
-# Replicate 10 times
+# Replicate 10 times: 10-fold cross validation
 lasso_mse_L <- map(1:10, ~ lasso_model(color, outcome)) 
 
 # Correlation and other features dataset----------------------------
@@ -79,11 +79,11 @@ print(beta_dt, n = 100)
 library(writexl)
 library(openxlsx)
 
-write_xlsx(lasso_features, path = "1021_lasso_features_L.xlsx")
-write.xlsx(lasso_features, file = "1021_lasso_features_L.xlsx")
+write_xlsx(lasso_features, path = "lasso_features.xlsx")
+write.xlsx(lasso_features, file = "lasso_features.xlsx")
 
-write_xlsx(beta_dt, path = "1016_lasso_coef_b.xlsx")
-write.xlsx(beta_dt, file = "1016_lasso_coef_b.xlsx")
+write_xlsx(beta_dt, path = "lasso_coef.xlsx")
+write.xlsx(beta_dt, file = "lasso_coef.xlsx")
 
 
 
