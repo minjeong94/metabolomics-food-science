@@ -6,6 +6,7 @@ library(purrr)
 
 setwd("C:/Users/Desktop")
 
+# Create dummy variables for "Storage_2": Stored samepls are "1" and control group samples are "0"
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
@@ -42,12 +43,12 @@ plsr_model <- function(data, outcome)
   rmse <- sqrt(mse)  # Calculate RMSE from MSE
   mse_sd <- sd((test_Y - prediction)^2)
   #r_sq <- summary(plsr_reg)$adjr2  # Get adjusted R-squared value
-  correlation <- cor(prediction, test_Y)  # Calculate the correlation between predicted and observed values
+  correlation <- cor(prediction, test_Y)  # Calculate the correlation between predicted and observed values: Accuracy
   
   return(list(tibble(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation), loadings = loadings_component1))
 }
 
-# Replicate 10 times
+# Replicate 10 times:10-fold cross validation
 plsr_mse_L <- map(1:10, ~ plsr_model(color, outcome))
 
 
@@ -75,10 +76,10 @@ print(loadings_dt, n = 100)
 library(writexl)
 library(openxlsx)
 
-write_xlsx(plsr_features, path = "1019_plsr_features_L.xlsx")
-write.xlsx(plsr_features, file = "1019_plsr_features_L.xlsx")
+write_xlsx(plsr_features, path = "plsr_features.xlsx")
+write.xlsx(plsr_features, file = "plsr_features.xlsx")
 
-write_xlsx(loadings_dt, path = "1016_plsr_load_b.xlsx")
-write.xlsx(loadings_dt, file = "1016_plsr_load_b.xlsx")
+write_xlsx(loadings_dt, path = "plsr_load.xlsx")
+write.xlsx(loadings_dt, file = "plsr_load.xlsx")
 
 
