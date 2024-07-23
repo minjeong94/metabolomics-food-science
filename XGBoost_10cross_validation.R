@@ -3,17 +3,17 @@ library(tidyverse)
 library(haven)
 library(purrr)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv")
 
-# Create dummy variables for "Storage_2"
+# Create dummy variables for "Storage": Stored samepls are "1" and control group is "0"
 color <- color %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
 
 data <- color
-outcome <- "L"  
+outcome <- "L"  # Here you can apply a or b for redness and yellowness
 
 XGBoost_model <- function(data, outcome, size = 50)
 {
@@ -60,21 +60,20 @@ XGBoost_model <- function(data, outcome, size = 50)
   rmse <- sqrt(mse)  # Calculate RMSE from MSE
   mse_sd <- sd((test_Y - prediction)^2)
   
-  # Calculate the correlation between predicted and observed values
+  # Calculate the correlation between predicted and observed values: Accuracy between prediction and observation
   correlation <- cor(prediction, test_Y)
   
   return(list(tibble(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation ), importance = feature_importance))
 }
 
+# The comparison of performance depending on the sample size
 sample_size = c(50:200)
-
-
 
 for(i in sample_size) {
   
 }
 
-# Replicate 10 times
+# Replicate 10 times = 10-fold cross validation
 XGBoost <- map(1:10, ~ XGBoost_model(color, outcome)) 
 
 # Correlation and other features dataset----------------------------
@@ -85,8 +84,6 @@ XGBoost_features
 # List of feature importance scores for each cross-validation run
 Xgboost_vars <- lapply(XGBoost, function(sublist) sublist$importance)
 
-# Assuming df_list is your list of dataframes
-# and key_var is the common key variable
 Xgboost_gain <- Xgboost_vars %>% 
   reduce(left_join, by = "Feature") %>% 
   select(Feature, starts_with("Gain"))
@@ -105,14 +102,14 @@ Xgboost_frequency <- Xgboost_vars %>%
 library(writexl)
 library(openxlsx)
 
-write_xlsx(XGBoost_features, path = "1018_XGBoost_features_b.xlsx")
-write.xlsx(XGBoost_features, file = "1018_XGBoost_features_b.xlsx")
+write_xlsx(XGBoost_features, path = "XGBoost_features.xlsx")
+write.xlsx(XGBoost_features, file = "XGBoost_features.xlsx")
 
-write_xlsx(Xgboost_gain, path = "1016_gain_Xgboost_b.xlsx")
-write.xlsx(Xgboost_gain, file = "1016_gain_Xgboost_b.xlsx")
+write_xlsx(Xgboost_gain, path = "gain_Xgboost.xlsx")
+write.xlsx(Xgboost_gain, file = "gain_Xgboost.xlsx")
 
-write_xlsx(Xgboost_cover, path = "cover_Xgboost_L.xlsx")
-write.xlsx(Xgboost_cover, file = "cover_Xgboost_L.xlsx")
+write_xlsx(Xgboost_cover, path = "cover_Xgboost.xlsx")
+write.xlsx(Xgboost_cover, file = "cover_Xgboost.xlsx")
 
 write_xlsx(Xgboost_frequency, path = "frequency_Xgboost_L.xlsx")
 write.xlsx(Xgboost_frequency, file = "frequency_Xgboost_L.xlsx")
