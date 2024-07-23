@@ -28,7 +28,7 @@ svr_model <- function(data, outcome) {
  train_X <- train_data[, c(9:ncol(train_data))]
  test_X <- test_data[, c(9:ncol(test_data))]
 
- # Train the SVR model
+ # Train the SVR model - The kernel type can be "linear" or "polynomial"
  svr_model <- svm(train_Y ~ ., data = train_X, kernel = "radial", cost = 1)
  
  # Make predictions on the test data
