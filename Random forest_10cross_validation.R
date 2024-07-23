@@ -8,7 +8,7 @@ setwd("C:/Users/Desktop")
 
 color <- read_csv("color.csv")
 
-# Create dummy variables for "Storage_2": The stored samples are "1" and control group is "0"
+# Create dummy variables for "Storage_2": Stored samepls are "1" and control group samples are "0"
 color <- color %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
