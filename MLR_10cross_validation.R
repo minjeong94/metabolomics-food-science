@@ -4,8 +4,9 @@ library(tidylog)
 library(haven)
 library(purrr)
 
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
+# Create dummy variables for "Storage_2": Stored samepls are "1" and control group samples are "0"
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
@@ -42,7 +43,7 @@ linear_model <- function(data, outcome)
   rmse <- sqrt(mse)  # Calculate RMSE from MSE
   mse_sd <- sd((test_Y - prediction)^2)
   r_sq <- summary(linear_reg)$r.squared  # Get R-squared value
-  correlation <- cor(prediction, test_Y)  # Calculate the correlation between predicted and observed values
+  correlation <- cor(prediction, test_Y)  # Calculate the correlation between predicted and observed values: Accuracy
   
   # Extract coefficients
   coefficients <- coef(linear_reg)
@@ -51,7 +52,7 @@ linear_model <- function(data, outcome)
     )
   }
 
-# Replicate 10 times
+# Replicate 10 times: 10-fold cross validation
 linear_mse_L <- map(1:10, ~ linear_model(color, outcome)) 
 
 # Correlation and other features dataset----------------------------
@@ -74,11 +75,11 @@ print(linear_coefs_dt, n = 100)
 library(writexl)
 library(openxlsx)
 
-write_xlsx(linear_features, path = "1019_linear_features_L.xlsx")
-write.xlsx(linear_features, file = "1019_linear_features_L.xlsx")
+write_xlsx(linear_features, path = "linear_features.xlsx")
+write.xlsx(linear_features, file = "linear_features.xlsx")
 
-write_xlsx(linear_coefs_dt, path = "101623_linear_coefs_b.xlsx")
-write.xlsx(linear_coefs_dt, file = "101623_linear_coefs_b.xlsx")
+write_xlsx(linear_coefs_dt, path = "linear_coefs.xlsx")
+write.xlsx(linear_coefs_dt, file = "linear_coefs.xlsx")
 
 
 
