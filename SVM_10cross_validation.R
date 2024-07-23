@@ -7,7 +7,7 @@ library(purrr)
 # Load your data and set the working directory
 setwd("C:/Users/Desktop")
 
-
+# Create dummy variables for "Storage_2": Stored samepls are "1" and control group samples are "0"
 color <- read_csv("color.csv") %>% 
   mutate(storage = ifelse(Storage_2 == "Storage", 1, 0))
 
