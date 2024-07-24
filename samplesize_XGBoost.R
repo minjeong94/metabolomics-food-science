@@ -140,7 +140,6 @@ feols(rmse ~ size, data = model_rmse)
 
 plot(model_rmse)
 
-
 # Export the data into xlsx
 library(writexl)
 library(openxlsx)
@@ -156,14 +155,3 @@ write.xlsx(model_rmse, file = "1107_XGB_model_rmse_5st_L.xlsx")
 write_xlsx(model_corr, path = "1107_XGB_model_corr_10st_L.xlsx")
 write.xlsx(model_corr, file = "1107_XGB_model_corr_10st_L.xlsx")
 
-# Load required libraries
-library(ggplot2)
-library(rgl)
-library(magrittr)
-
-# Creat the plot of sample size vs RMSE and sample size vs Accuracy
-qplot(data = model_rmse, x = size, y = rmse,, xlab = "Sample size", ylab = "Performance (RMSE)") + geom_hline(yintercept = 2.0) +
-  geom_vline(xintercept = 50) 
-
-qplot(data = model_corr, x = size, y = correlation,, xlab = "Sample size", ylab = "Accuracy (R)") + geom_hline(yintercept = 2.0) +
-  geom_vline(xintercept = 50) 
