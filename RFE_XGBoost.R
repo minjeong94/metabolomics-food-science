@@ -93,7 +93,6 @@ xgbFuncs$rank =function (object, x, y) {
 }
 
 xgbFuncs$selectSize = function (x, metric, maximize) {
-  print("SHIBAL-2")  
         best <- if (maximize) 
         which.max(x[, metric])
     else which.min(x[, metric])
@@ -102,7 +101,6 @@ xgbFuncs$selectSize = function (x, metric, maximize) {
 
 
 xgbFuncs$selectVar = function (y, size) {
-  print("SHIBAL-3")  
   finalImp <- plyr::ddply(y[, c("Overall", "var")],  ~var, function(x) mean(x$Overall, 
         na.rm = TRUE))
     names(finalImp)[2] <- "Overall"
