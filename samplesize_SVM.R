@@ -5,7 +5,7 @@ library(haven)
 library(purrr)
 
 # Load your data and set the working directory
-setwd("C:/Users/mk41285/Documents/Pecan_storage_color/R studio")
+setwd("C:/Users/Desktop")
 
 
 # Create dummy variables for "Storage_2"
