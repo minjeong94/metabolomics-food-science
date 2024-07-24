@@ -79,7 +79,7 @@ for(i in sample_size) {
     )
   }
 }
-# Correlation between prediction and observation: Accuracy
+# RMSE and Correlation between prediction and observation: Accuracy
 model_total <- model_total %>% 
   group_by(size) %>% 
   summarise(correlation = mean(correlation), rmse = mean(rmse))
