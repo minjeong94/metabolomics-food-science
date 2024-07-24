@@ -38,7 +38,7 @@ lasso_model <- function(data, outcome)
     train_Y,
     type.measure = "mse",  # Use "mse" for Mean Squared Error
     nfolds = 10,
-    alpha = 0.999
+    alpha = 0.999 # 0.0001 Ridge regression / 0.5 Elastic net regression
   )
   
   lambda_min <- cvfit$lambda.min #With the minimum lambda
