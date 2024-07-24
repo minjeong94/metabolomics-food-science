@@ -113,7 +113,7 @@ rfmodel_total <- rfmodel_total %>%
 library(writexl)
 library(openxlsx)
 
-write_xlsx(rfmodel_total, path = "1107_rf_model_total5st_b.xlsx")
-write.xlsx(rfmodel_total, file = "1107_rf_model_total5st_b.xlsx")
+write_xlsx(rfmodel_total, path = "samplesize_rf.xlsx")
+write.xlsx(rfmodel_total, file = "samplesize_rf.xlsx")
 
 
