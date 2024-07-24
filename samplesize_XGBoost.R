@@ -161,26 +161,9 @@ library(ggplot2)
 library(rgl)
 library(magrittr)
 
-theme_publication <- function(base_size = 14) {
-  theme_minimal(base_size = base_size)+
-    theme(
-      aspect.ratio = 1,  # this makes the physical aspect ratio square
-      plot.background = element_rect(fill = "white", color = NA),
-      panel.grid.minor = element_line(color = "grey90"),
-      panel.grid.major = element_line(color = "grey90"),
-      panel.border = element_blank(),
-      axis.text.x = element_text(angle = 45, hjust = 1, size = base_size - 2),
-      legend.position = "right",
-      plot.title = element_text(face = "bold", size = base_size + 2),
-      plot.subtitle = element_text(size = base_size),
-      text = element_text(family = "serif")
-    )
-}
-
 # Creat the plot of sample size vs RMSE and sample size vs Accuracy
 qplot(data = model_rmse, x = size, y = rmse,, xlab = "Sample size", ylab = "Performance (RMSE)") + geom_hline(yintercept = 2.0) +
-  geom_vline(xintercept = 50) + theme_publication()
+  geom_vline(xintercept = 50) 
 
 qplot(data = model_corr, x = size, y = correlation,, xlab = "Sample size", ylab = "Accuracy (R)") + geom_hline(yintercept = 2.0) +
-  geom_vline(xintercept = 50) + theme_publication()
-
+  geom_vline(xintercept = 50) 
