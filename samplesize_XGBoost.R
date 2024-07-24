@@ -65,32 +65,7 @@ XGBoost_model <- function(data, outcome, s = 50)
   return(list(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation, size = s))
 }
 
-#---------------------------------------------------------------------------------------------
-sample_size = c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190)
-XG_total <- tibble(rmse = numeric(), correlation = numeric(), size = numeric())
-
-XG_models = list()
-for(i in 1:10) {
-  XG_models[[i]] = lapply(sample_size, function(x) {
-    XGBoost_model(color, outcome, s = x)})
-}
-
-XG_models = bind_rows(XG_models)
-
-XG_models = XG_models %>% 
-  group_by(size) %>% 
-  summarise(rmse = mean(rmse), correlation = mean(correlation))
-
-plot(XG_models$size, XG_models$rmse)
-
-# Export the data into xlsx
-library(writexl)
-library(openxlsx)
-
-write_xlsx(XG_models, path = "1109_XG_total_L.xlsx")
-write.xlsx(XG_models, file = "1109_XG_total_L.xlsx")
-
-#---------------Correlation--------------------------------------------------------------------------------
+#---------------Sample Size--------------------------------------------------------------------------------
 sample_size = c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180)
 model_total <- tibble(rmse = numeric(), correlation = numeric(), size = numeric())
 
