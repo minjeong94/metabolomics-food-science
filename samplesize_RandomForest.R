@@ -64,32 +64,6 @@ RandomForest_model <- function(data, outcome, s = 50)
   return(list(rmse = rmse, mse = mse, mse_sd = mse_sd, correlation = correlation, size = s))
 }
 
-#---------------------------------------------------------------------------------------------
-sample_size = c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180)
-RF_total <- tibble(rmse = numeric(), correlation = numeric(), size = numeric())
-
-RF_models = list()
-for(i in 1:10) {
-  RF_models[[i]] = lapply(sample_size, function(x) {
-    RandomForest_model(color, outcome, s = x)})
-}
-
-RF_models = bind_rows(RF_models)
-
-RF_models = RF_models %>% 
-  group_by(size) %>% 
-  summarise(rmse = mean(rmse), correlation = mean(correlation))
-
-plot(RF_models$size, RF_models$rmse)
-
-# Export the data into xlsx
-library(writexl)
-library(openxlsx)
-
-write_xlsx(RF_models, path = "1109_RF_total_b.xlsx")
-write.xlsx(RF_models, file = "1109_RF_total_b.xlsx")
-
-
 #---------------Sample size--------------------------------------------------------------------------------
 sample_size = c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180)
 rfmodel_total <- tibble(rmse = numeric(), correlation = numeric(), size = numeric())
