@@ -112,46 +112,10 @@ model_total <- model_total %>%
 
 model_total <- ungroup(model_total)
 
-
-feols(correlation ~ size, data = model_corr)
-
-plot(model_corr)
-
-#--------------RMSE---------------------------------------------------------------------------------
-sample_size = c(50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180)
-model_rmse <- tibble(rmse = numeric(), size = numeric())
-
-for(i in sample_size) {
-  for(j in 1:10) {
-    model_rmse = bind_rows(
-      model_rmse, 
-      tibble(size = i, rmse = XGBoost_model(data, outcome, s = i)[[1]]$rmse)
-    )
-  }
-}
-
-model_rmse <- model_rmse %>% 
-  group_by(size) %>% 
-  summarise(rmse = mean(rmse))
-
-model_rmse <- ungroup(model_rmse)
-
-feols(rmse ~ size, data = model_rmse)
-
-plot(model_rmse)
-
 # Export the data into xlsx
 library(writexl)
 library(openxlsx)
 
-write_xlsx(model_total, path = "1107_XGB_model_total5st_b.xlsx")
-write.xlsx(model_total, file = "1107_XGB_model_total5st_b.xlsx")
-
-
-write_xlsx(model_rmse, path = "1107_XGB_model_rmse_5st_L.xlsx")
-write.xlsx(model_rmse, file = "1107_XGB_model_rmse_5st_L.xlsx")
-
-
-write_xlsx(model_corr, path = "1107_XGB_model_corr_10st_L.xlsx")
-write.xlsx(model_corr, file = "1107_XGB_model_corr_10st_L.xlsx")
+write_xlsx(model_total, path = "samplesize_xgboost.xlsx")
+write.xlsx(model_total, file = "samplesize_xgboost.xlsx")
 
