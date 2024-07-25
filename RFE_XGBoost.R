@@ -83,7 +83,6 @@ xgbFuncs$pred = function (object, x) {
 
 
 xgbFuncs$rank =function (object, x, y) {
-  print("SHIBAL-1")  
   coefs <- abs(xgb.importance(model = object)$Gain)
     coefs[is.na(coefs)] <- 0
     vimp <- data.frame(Overall = coefs, var = xgb.importance(model = object)$Feature)
