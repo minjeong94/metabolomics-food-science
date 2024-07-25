@@ -41,6 +41,7 @@ lasso_model <- function(data, outcome)
     alpha = 0.999 # 0.0001 Ridge regression / 0.5 Elastic net regression
   )
   
+ # Optimizing the model by 10-fold cross validation
   lambda_min <- cvfit$lambda.min #With the minimum lambda
   
   lasso_reg <- glmnet(train_X, train_Y, lambda = lambda_min)
